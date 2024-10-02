@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test XSS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            color: red;
+            font-size: 36px;
+            font-family: Cursive;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 300px;
+        }
+
+        input:focus {
+            border-color: red;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-left: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: darkgreen;
+        }
+
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            color: whitesmoke;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 7px;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 9px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>HTMLi</h1><br>
+
+    <input type="text" id="userInput" placeholder="Enter query here...">
+    <button onclick="displayInput()">Submit</button>
+
+    <div class="output" id="output"></div>
+
+    <div class="footer">Created by KnOX</div>
+
+    <script>
+        function displayInput() {
+
+            var input = document.getElementById("userInput").value;
+
+            document.getElementById("userInput").value = '';
+
+            var newDiv = document.createElement('div');
+            newDiv.innerHTML = input;
+
+            document.getElementById("output").appendChild(newDiv);
+
+            var scripts = newDiv.getElementsByTagName('script');
+            for (var i = 0; i < scripts.length; i++) {
+                eval(scripts[i].innerText);
+            }
+
+            try {
+                eval(input);
+            } catch (e) {
+                console.error('Error executing JavaScript:', e);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
